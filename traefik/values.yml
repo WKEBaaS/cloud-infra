@@ -1,0 +1,13 @@
+ports:
+  web:
+    nodePort: 30080
+  websecure:
+    nodePort: 30443
+ingressRoute:
+  dashboard:
+    enabled: true
+    entryPoints:
+      - websecure
+    matchRule: Host(`traefik.baas.wke.csie.ncnu.edu.tw`)
+    tls:
+      secretName: wildcard-baas-tls
