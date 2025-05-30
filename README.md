@@ -43,7 +43,7 @@ curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releas
 
 ```bash
 # helm upgrade --install traefik traefik/traefik  -n traefik-system --create-namespace --values ./traefik/values.yml
-just traefik
+just traefik-init
 ```
 
 ### Local Development Certificate
@@ -59,7 +59,7 @@ kubectl create secret -n traefik-system tls local-baas-tls --key local-baas.key 
 [Ref: NixOS K3s Storage Example](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/cluster/k3s/docs/examples/STORAGE.md)
 
 ```bash
-just longhorn
+just longhorn-init
 ```
 
 ### Install CloudNativePG (Postgres Operator)
