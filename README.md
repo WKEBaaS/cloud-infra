@@ -8,9 +8,12 @@
     + [Kyverno](#kyverno)
     + [Operator Lifecycle Manager (OLM)](#operator-lifecycle-manager-olm)
   * [Install Traefik (K8s ingress controller)](#install-traefik-k8s-ingress-controller)
-  * [Local Development Certificate](#local-development-certificate)
   * [Install Longhorn (K8s Storage Provider)](#install-longhorn-k8s-storage-provider)
-  * [Install CloudNativePG (Postgres Operator)](#install-cloudnativepg-postgres-operator)
+  * [Install CloudNativePG (Postgres Operator) via OLM](#install-cloudnativepg-postgres-operator-via-olm)
+  * [Install Keycloak via OLM (SSO)](#install-keycloak-via-olm-sso)
+    + [Install Keycloak Operator](#install-keycloak-operator)
+    + [Deploy Keycloak via Keycloak Operator](#deploy-keycloak-via-keycloak-operator)
+  * [Local Development Certificate](#local-development-certificate)
 
 <!-- tocstop -->
 
@@ -46,14 +49,6 @@ curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releas
 just traefik-init
 ```
 
-### Local Development Certificate
-
-```bash
-mkcert "*.baas.local" baas.local
-# rename certs to .key/.crt
-kubectl create secret -n traefik-system tls local-baas-tls --key local-baas.key --cert local-baas.crt
-```
-
 ### Install Longhorn (K8s Storage Provider)
 
 [Ref: NixOS K3s Storage Example](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/cluster/k3s/docs/examples/STORAGE.md)
@@ -62,7 +57,7 @@ kubectl create secret -n traefik-system tls local-baas-tls --key local-baas.key 
 just longhorn-init
 ```
 
-### Install CloudNativePG (Postgres Operator)
+### Install CloudNativePG (Postgres Operator) via OLM
 
 > CloudNativePG is an open source operator designed to manage highly available PostgreSQL databases with a primary/standby architecture on any supported Kubernetes cluster.
 
@@ -70,4 +65,36 @@ just longhorn-init
 kubectl create -f https://operatorhub.io/install/cloudnative-pg.yaml
 # To check CloudNativePG is installed successfully
 kubectl get csv -n operators
+```
+
+### Install Keycloak via OLM (SSO)
+
+#### Install Keycloak Operator
+
+```bash
+kubectl create -f https://operatorhub.io/install/keycloak-operator.yaml
+# To check Keycloak Operator is installed successfully
+kubectl get csv -n operators
+```
+
+#### Deploy Keycloak via Keycloak Operator
+
+> [!NOTE]
+> `just keycloak-init` will do following things
+>
+> 1. Create `keycloak` namespace
+> 2. Deploy Keycloak database via CloudNativePG
+> 3. Create WKE TLS Secret
+> 4. Deploy Keycloak via keycloak-operator
+
+```bash
+just keycloak-init
+```
+
+### Local Development Certificate
+
+```bash
+mkcert "*.baas.local" baas.local
+# rename certs to .key/.crt
+kubectl create secret -n traefik-system tls local-baas-tls --key local-baas.key --cert local-baas.crt
 ```

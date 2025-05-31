@@ -1,0 +1,85 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  labels:
+    app: keycloak
+  name: keycloak
+  namespace: keycloak
+spec:
+  hostname:
+    hostname: https://auth.wke.csie.ncnu.edu.tw
+  resources:
+    requests:
+      cpu: "2"
+      memory: "1250M"
+    limits:
+      cpu: "6"
+      memory: "2250M"
+  db:
+    vendor: postgres
+    url: jdbc:postgresql://keycloak-db-rw.keycloak:5432/app
+    poolMinSize: 30
+    poolInitialSize: 30
+    poolMaxSize: 30
+    usernameSecret:
+      name: keycloak-db-app
+      key: username
+    passwordSecret:
+      name: keycloak-db-app
+      key: password
+  # image: <KEYCLOAK_IMAGE_HERE>
+  startOptimized: false
+  features:
+    enabled:
+      - user-event-metrics
+      # - multi-site
+  transaction:
+    xaEnabled: false
+  additionalOptions:
+    - name: log-console-output
+      value: json
+    - name: metrics-enabled
+      value: "true"
+    - name: event-metrics-user-enabled
+      value: "true"
+    # - name: cache-remote-host
+    #   value: "infinispan.keycloak.svc"
+    # - name: cache-remote-port
+    #   value: "11222"
+    # - name: cache-remote-username
+    #   secret:
+    #     name: remote-store-secret
+    #     key: username
+    # - name: cache-remote-password
+    #   secret:
+    #     name: remote-store-secret
+    #     key: password
+    # - name: spi-connections-infinispan-quarkus-site-name
+    #   value: keycloak
+    # - name: db-driver
+    #   value: software.amazon.jdbc.Driver
+  http:
+    # tlsSecret: wke-tls
+    httpEnabled: true
+    httpPort: 8080
+    # httpsPort: 8443
+  ingress:
+    enabled: false
+  instances: 1
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: keycloak-ingressroute
+  namespace: keycloak
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`auth.wke.csie.ncnu.edu.tw`)
+      kind: Rule
+      services:
+        - name: keycloak-service
+          port: 8080
+  tls:
+    secretName: wke-tls

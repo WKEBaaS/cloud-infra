@@ -28,3 +28,12 @@ longhorn:
 update-helm-repos:
   helm repo update
   
+[group('operator')]
+keycloak-init:
+  kubectl apply -f {{source_dir}}/keycloak/keycloak-operator.yml
+  kubectl apply -f {{source_dir}}/keycloak/db.yml
+  kubectl create secret tls wke-tls --namespace keycloak \
+    --cert={{source_dir}}/certs/wke.csie.ncnu.edu.tw_CER.cer \
+    --key={{source_dir}}/certs/wke.csie.ncnu.edu.tw_KEY.key 
+  kubectl apply -f {{source_dir}}/keycloak/keycloak.yml
+
