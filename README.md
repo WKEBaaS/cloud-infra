@@ -15,8 +15,6 @@
   * [Install Longhorn (K8s Storage Provider)](#install-longhorn-k8s-storage-provider)
   * [Install CloudNativePG (Postgres Operator) via OLM](#install-cloudnativepg-postgres-operator-via-olm)
   * [Install Keycloak via OLM (SSO)](#install-keycloak-via-olm-sso)
-    + [Install Keycloak Operator](#install-keycloak-operator)
-    + [Deploy Keycloak via Keycloak Operator](#deploy-keycloak-via-keycloak-operator)
   * [Local Development Certificate](#local-development-certificate)
 
 <!-- tocstop -->
@@ -91,16 +89,6 @@ $ kubectl get csv -n operators
 ```
 
 ### Install Keycloak via OLM (SSO)
-
-#### Install Keycloak Operator
-
-```bash
-$ kubectl create -f https://operatorhub.io/install/keycloak-operator.yaml
-# To check Keycloak Operator is installed successfully
-$ kubectl get csv -n operators
-```
-
-#### Deploy Keycloak via Keycloak Operator
 
 > [!NOTE]
 > `just keycloak-init` will do following things
