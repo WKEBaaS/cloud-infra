@@ -14,9 +14,20 @@ wke-tls-init:
     --cert={{source_dir}}/certs/wke.csie.ncnu.edu.tw_CER.cer \
     --key={{source_dir}}/certs/wke.csie.ncnu.edu.tw_KEY.key
   kubectl annotate secret --namespace wke wke-tls \
-    'reflector.v1.k8s.emberstack.com/reflection-auto-enabled=true'
+    'reflector.v1.k8s.emberstack.com/reflection-auto-enabled=true' \
     'reflector.v1.k8s.emberstack.com/reflection-allowed=true' \
     'reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces=traefik-system,keycloak,baas,baas-project'
+
+baas-wildcard-tls-init:
+  kubectl create namespace baas
+  kubectl create namespace baas-project
+  kubectl create secret tls baas-wildcard-tls --namespace baas \
+    --cert={{source_dir}}/certs/_wildcard.baas.wke.csie.ncnu.edu.tw.crt \
+    --key={{source_dir}}/certs/_wildcard.baas.wke.csie.ncnu.edu.tw-key.key
+  kubectl annotate secret --namespace baas baas-wildcard-tls \
+    'reflector.v1.k8s.emberstack.com/reflection-auto-enabled=true' \
+    'reflector.v1.k8s.emberstack.com/reflection-allowed=true' \
+    'reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces=baas-project,traefik-system'
   
 traefik-init:
   helm repo add traefik https://helm.traefik.io/traefik
@@ -47,8 +58,5 @@ update-helm-repos:
 keycloak-init:
   kubectl apply -f {{source_dir}}/keycloak/keycloak-operator.yml
   kubectl apply -f {{source_dir}}/keycloak/db.yml
-  kubectl create secret tls wke-tls --namespace keycloak \
-    --cert={{source_dir}}/certs/wke.csie.ncnu.edu.tw_CER.cer \
-    --key={{source_dir}}/certs/wke.csie.ncnu.edu.tw_KEY.key 
   kubectl apply -f {{source_dir}}/keycloak/keycloak.yml
 

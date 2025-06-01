@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD004 MD013 -->
+
 # Kubernetes Cloud Infra
 
 <!-- toc -->
@@ -8,7 +10,7 @@
     + [Kyverno](#kyverno)
     + [Operator Lifecycle Manager (OLM)](#operator-lifecycle-manager-olm)
   * [Install Reflector to sync TLS secrets across namespaces](#install-reflector-to-sync-tls-secrets-across-namespaces)
-    + [Syncing WKE TLS Secrets](#syncing-wke-tls-secrets)
+    + [Syncing WKE/*.BaaS TLS Secrets](#syncing-wkebaas-tls-secrets)
   * [Install Traefik (K8s ingress controller)](#install-traefik-k8s-ingress-controller)
   * [Install Longhorn (K8s Storage Provider)](#install-longhorn-k8s-storage-provider)
   * [Install CloudNativePG (Postgres Operator) via OLM](#install-cloudnativepg-postgres-operator-via-olm)
@@ -53,13 +55,14 @@ curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releas
 just reflector-init
 ```
 
-#### Syncing WKE TLS Secrets
+#### Syncing WKE/*.BaaS TLS Secrets
 
 1. Create WKE TLS Secret
 2. Add reflector annotations to the secret
 
 ```bash
 just wke-tls-init
+just wildcard-baas-tls-init
 ```
 
 ### Install Traefik (K8s ingress controller)
@@ -104,8 +107,7 @@ $ kubectl get csv -n operators
 >
 > 1. Create `keycloak` namespace
 > 2. Deploy Keycloak database via CloudNativePG
-> 3. Create WKE TLS Secret
-> 4. Deploy Keycloak via keycloak-operator
+> 3. Deploy Keycloak via keycloak-operator
 
 ```bash
 just keycloak-init

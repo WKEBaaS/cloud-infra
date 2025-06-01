@@ -17,7 +17,7 @@ ingressRoute:
       - websecure
     matchRule: Host(`traefik.baas.wke.csie.ncnu.edu.tw`)
     tls:
-      secretName: wildcard-baas-tls
+      secretName: baas-wildcard-tls
 logs:
   access:
     enabled: true
