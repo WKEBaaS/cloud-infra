@@ -3,6 +3,21 @@
 source_dir := source_dir()
   
 [group('helm')]
+reflector-init:
+  helm repo add emberstack https://emberstack.github.io/helm-charts
+  helm repo update
+  helm upgrade --install reflector emberstack/reflector --namespace reflector-system --create-namespace
+
+wke-tls-init:
+  kubectl create namespace wke
+  kubectl create secret tls wke-tls --namespace wke \
+    --cert={{source_dir}}/certs/wke.csie.ncnu.edu.tw_CER.cer \
+    --key={{source_dir}}/certs/wke.csie.ncnu.edu.tw_KEY.key
+  kubectl annotate secret --namespace wke wke-tls \
+    'reflector.v1.k8s.emberstack.com/reflection-auto-enabled=true'
+    'reflector.v1.k8s.emberstack.com/reflection-allowed=true' \
+    'reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces=traefik-system,keycloak,baas,baas-project'
+  
 traefik-init:
   helm repo add traefik https://helm.traefik.io/traefik
   helm repo update
