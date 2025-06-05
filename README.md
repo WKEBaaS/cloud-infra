@@ -55,7 +55,7 @@ just reflector-init
 
 #### Syncing WKE/*.BaaS TLS Secrets
 
-1. Create WKE TLS Secret
+1. Create WKE TLS Secret (make sure `Cert` is fullchain)
 2. Add reflector annotations to the secret
 
 ```bash
