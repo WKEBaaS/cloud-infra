@@ -10,7 +10,7 @@
     + [Kyverno](#kyverno)
     + [Operator Lifecycle Manager (OLM)](#operator-lifecycle-manager-olm)
   * [Install Reflector to sync TLS secrets across namespaces](#install-reflector-to-sync-tls-secrets-across-namespaces)
-    + [Syncing WKE/*.BaaS TLS Secrets](#syncing-wkebaas-tls-secrets)
+    + [Syncing WKE/\*.BaaS TLS Secrets](#syncing-wkebaas-tls-secrets)
   * [Install Traefik (K8s ingress controller)](#install-traefik-k8s-ingress-controller)
   * [Install Longhorn (K8s Storage Provider)](#install-longhorn-k8s-storage-provider)
   * [Install CloudNativePG (Postgres Operator) via OLM](#install-cloudnativepg-postgres-operator-via-olm)
@@ -33,7 +33,7 @@
 > The Kyverno project provides a comprehensive set of tools to manage the complete Policy-as-Code (PaC) lifecycle for Kubernetes and other cloud native environments
 
 ```bash
-kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.13.0/install.yaml
+kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.15.1/install.yaml
 ```
 
 #### Operator Lifecycle Manager (OLM)
@@ -53,7 +53,7 @@ curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releas
 just reflector-init
 ```
 
-#### Syncing WKE/*.BaaS TLS Secrets
+#### Syncing WKE/\*.BaaS TLS Secrets
 
 1. Create WKE TLS Secret (make sure `Cert` is fullchain)
 2. Add reflector annotations to the secret
@@ -90,8 +90,7 @@ $ kubectl get csv -n operators
 
 ### Install Keycloak via OLM (SSO)
 
-> [!NOTE]
-> `just keycloak-init` will do following things
+> [!NOTE] > `just keycloak-init` will do following things
 >
 > 1. Create `keycloak` namespace
 > 2. Deploy Keycloak database via CloudNativePG

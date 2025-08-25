@@ -2,4 +2,4 @@ ingress:
   enabled: true
   host: longhorn.baas.wke.csie.ncnu.edu.tw
   tls: true
-  tlsSecret: wildcard-baas-tls
+  tlsSecret: baas-wildcard-tls
