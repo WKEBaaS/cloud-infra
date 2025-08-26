@@ -8,14 +8,12 @@
 - [Setup Kubernetes](#setup-kubernetes)
   * [Infra](#infra)
     + [Kyverno](#kyverno)
-    + [Operator Lifecycle Manager (OLM)](#operator-lifecycle-manager-olm)
   * [Install Reflector to sync TLS secrets across namespaces](#install-reflector-to-sync-tls-secrets-across-namespaces)
     + [Syncing WKE/\*.BaaS TLS Secrets](#syncing-wkebaas-tls-secrets)
   * [Install Traefik (K8s ingress controller)](#install-traefik-k8s-ingress-controller)
   * [Install Longhorn (K8s Storage Provider)](#install-longhorn-k8s-storage-provider)
   * [Install CloudNativePG (Postgres Operator) via OLM](#install-cloudnativepg-postgres-operator-via-olm)
-  * [Install Keycloak via OLM (SSO)](#install-keycloak-via-olm-sso)
-  * [Local Development Certificate](#local-development-certificate)
+    + [Local Development Certificate](#local-development-certificate)
 
 <!-- tocstop -->
 
@@ -36,14 +34,6 @@
 kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.15.1/install.yaml
 ```
 
-#### Operator Lifecycle Manager (OLM)
-
-> A tool to help manage the Operators running on your cluster.
-
-```bash
-curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.32.0/install.sh | bash -s v0.32.0
-```
-
 ### Install Reflector to sync TLS secrets across namespaces
 
 > Custom Kubernetes controller that can be used to replicate secrets, configmaps and certificates.
@@ -60,7 +50,7 @@ just reflector-init
 
 ```bash
 just wke-tls-init
-just wildcard-baas-tls-init
+just baas-wildcard-tls-init
 ```
 
 ### Install Traefik (K8s ingress controller)
@@ -88,19 +78,7 @@ $ kubectl create -f https://operatorhub.io/install/cloudnative-pg.yaml
 $ kubectl get csv -n operators
 ```
 
-### Install Keycloak via OLM (SSO)
-
-> [!NOTE] > `just keycloak-init` will do following things
->
-> 1. Create `keycloak` namespace
-> 2. Deploy Keycloak database via CloudNativePG
-> 3. Deploy Keycloak via keycloak-operator
-
-```bash
-just keycloak-init
-```
-
-### Local Development Certificate
+#### Local Development Certificate
 
 ```bash
 $ mkcert "*.baas.local" baas.local
